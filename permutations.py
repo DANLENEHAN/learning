@@ -25,23 +25,57 @@ With combinations there are also two types:
 
 """
 
+
+def permutations(
+    org_string, curr_string="", repetition=True, all_substrings=False, choose=None
+):
+    if choose is None:
+        choose = len(org_string)
+    if len(curr_string) == choose:
+        return [curr_string]
+    perms = [curr_string] if curr_string != "" and all_substrings else []
+    for char in org_string:
+        if repetition == False and char in curr_string:
+            continue
+        else:
+            perms += permutations(
+                org_string=org_string,
+                curr_string=curr_string + char,
+                all_substrings=all_substrings,
+                repetition=repetition,
+                choose=choose,
+            )
+    return perms
+
+
+def combinations(org_string, curr_string="", index=0, repetition=True, choose=None):
+    if choose is None:
+        choose = len(org_string)
+    if len(curr_string) == choose:
+        return [curr_string]
+    perms = []
+    for char_index, char in enumerate(org_string[index:]):
+        if repetition == False and char in curr_string:
+            continue
+        else:
+            perms += combinations(
+                org_string=org_string,
+                curr_string=curr_string + char,
+                index=char_index + index,
+                repetition=repetition,
+                choose=choose,
+            )
+    return perms
+
+
 if __name__ == "__main__":
 
-    def permutations(org_string, curr_string="", repetition=True, all_substrings=False):
-        if len(curr_string) == len(org_string):
-            return [curr_string]
-        perms = [curr_string] if curr_string != "" and all_substrings else []
-        for char in org_string:
-            if repetition == False and char in curr_string:
-                continue
-            else:
-                perms += permutations(
-                    org_string=org_string,
-                    curr_string=curr_string + char,
-                    all_substrings=all_substrings,
-                    repetition=repetition,
-                )
-        return perms
+    """
+    Testing all the possible combinations
+    of these functions :)
+    """
+
+    print("\n")
 
     string = "AB"
     perms = permutations(org_string=string)
@@ -56,21 +90,19 @@ if __name__ == "__main__":
         f"All substrings for '{string}' length: ({len(all_substrings)}) {all_substrings}"
     )
 
-    def combinations(org_string, curr_string="", index=0, repetition=True):
-        if len(curr_string) == len(org_string):
-            return [curr_string]
-        perms = []
-        for char_index, char in enumerate(org_string[index:]):
-            if repetition == False and char in curr_string:
-                continue
-            else:
-                perms += combinations(
-                    org_string=org_string,
-                    curr_string=curr_string + char,
-                    index=char_index + index,
-                    repetition=repetition,
-                )
-        return perms
+    string = "ABC"
+    choose = len(string) - 1
+    perms = permutations(org_string=string, choose=choose)
+    print(
+        f"Permutations for '{string}' choose {choose} with repetition length: {len(perms)} {perms}"
+    )
+
+    string = "ABC"
+    choose = len(string) - 1
+    perms = permutations(org_string=string, choose=choose, repetition=False)
+    print(
+        f"Permutations for '{string}' choose {choose} with repetition length: {len(perms)} {perms}"
+    )
 
     print("\n")
 
@@ -89,3 +121,19 @@ if __name__ == "__main__":
     string = "ABC"
     combs = combinations(org_string=string, repetition=False)
     print(f"Combinations repetition for '{string}' length: ({len(combs)}) {combs}")
+
+    string = "ABC"
+    choose = len(string) - 1
+    combs = combinations(org_string=string, choose=choose)
+    print(
+        f"Combinations repetition for '{string}' choose {choose} length: ({len(combs)}) {combs}"
+    )
+
+    string = "ABC"
+    choose = len(string) - 1
+    combs = combinations(org_string=string, repetition=False, choose=choose)
+    print(
+        f"Combinations repetition for '{string}' choose {choose} no repetition length: ({len(combs)}) {combs}"
+    )
+
+    print("\n")
