@@ -27,35 +27,65 @@ With combinations there are also two types:
 
 if __name__ == "__main__":
 
-    def permutations(org_string, curr_string="", all_substrings=False):
+    def permutations(org_string, curr_string="", repetition=True, all_substrings=False):
         if len(curr_string) == len(org_string):
             return [curr_string]
         perms = [curr_string] if curr_string != "" and all_substrings else []
         for char in org_string:
-            perms += permutations(
-                org_string=org_string,
-                curr_string=curr_string + char,
-                all_substrings=all_substrings,
-            )
+            if repetition == False and char in curr_string:
+                continue
+            else:
+                perms += permutations(
+                    org_string=org_string,
+                    curr_string=curr_string + char,
+                    all_substrings=all_substrings,
+                    repetition=repetition,
+                )
         return perms
 
-    print(f'{permutations(org_string="AB")}\n')
-    print(f'{permutations(org_string="AB", all_substrings=True)}\n')
+    string = "AB"
+    perms = permutations(org_string=string)
+    perms_no_rep = permutations(org_string=string, repetition=False)
+    all_substrings = permutations(org_string=string, all_substrings=True)
 
-    def combinations(org_string, curr_string="", index=0):
+    print(f"Permuations for '{string}' length: ({len(perms)}) {perms}")
+    print(
+        f"Permuations no repetition '{string}' length: ({len(perms_no_rep)}) {perms_no_rep}"
+    )
+    print(
+        f"All substrings for '{string}' length: ({len(all_substrings)}) {all_substrings}"
+    )
+
+    def combinations(org_string, curr_string="", index=0, repetition=True):
         if len(curr_string) == len(org_string):
             return [curr_string]
         perms = []
         for char_index, char in enumerate(org_string[index:]):
-            perms += combinations(
-                org_string=org_string,
-                curr_string=curr_string + char,
-                index=char_index + index,
-            )
+            if repetition == False and char in curr_string:
+                continue
+            else:
+                perms += combinations(
+                    org_string=org_string,
+                    curr_string=curr_string + char,
+                    index=char_index + index,
+                    repetition=repetition,
+                )
         return perms
 
-    res = combinations(org_string="AB")
-    print(f"{res}, length: {len(res)}\n")
-    res = combinations(org_string="ABC")
-    print(f"{res}, length: {len(res)}\n")
+    print("\n")
 
+    string = "AB"
+    combs = combinations(org_string=string)
+    print(f"Combinations for '{string}' length: ({len(combs)}) {combs}")
+
+    string = "ABC"
+    combs = combinations(org_string=string)
+    print(f"Combinations for '{string}' length: ({len(combs)}) {combs}")
+
+    string = "AB"
+    combs = combinations(org_string=string, repetition=False)
+    print(f"Combinations no repetition for '{string}' length: ({len(combs)}) {combs}")
+
+    string = "ABC"
+    combs = combinations(org_string=string, repetition=False)
+    print(f"Combinations repetition for '{string}' length: ({len(combs)}) {combs}")
