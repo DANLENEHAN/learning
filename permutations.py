@@ -27,10 +27,18 @@ With combinations there are also two types:
 
 
 def permutations(
-    org_string, curr_string="", repetition=True, all_substrings=False, choose=None
-):
+    org_string: str,
+    curr_string: str = "",
+    repetition: bool = True,
+    all_substrings: bool = False,
+    choose: bool = None,
+) -> list:
     if choose is None:
         choose = len(org_string)
+    elif choose > len(org_string):
+        raise ValueError(
+            f"Passed: ({choose}) for var 'choose', must be <= ({len(org_string)}) length of 'org_string': '{org_string}'"
+        )
     if len(curr_string) == choose:
         return [curr_string]
     perms = [curr_string] if curr_string != "" and all_substrings else []
@@ -48,9 +56,19 @@ def permutations(
     return perms
 
 
-def combinations(org_string, curr_string="", index=0, repetition=True, choose=None):
+def combinations(
+    org_string: str,
+    curr_string: str = "",
+    index: int = 0,
+    repetition: bool = True,
+    choose: int = None,
+):
     if choose is None:
         choose = len(org_string)
+    elif choose > len(org_string):
+        raise ValueError(
+            f"Passed: ({choose}) for var 'choose', must be <= ({len(org_string)}) length of 'org_string': '{org_string}'"
+        )
     if len(curr_string) == choose:
         return [curr_string]
     perms = []
